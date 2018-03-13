@@ -1,0 +1,13 @@
+Package: MALDIHDX
+Type: Package
+Title: Suite of functions for the processing and analysis of MALDI HDX experiments
+Version: 0.1.0
+Author: Sam MacIntyre
+Maintainer: The package maintainer <smacintyre@csiro.au>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: MALDIquant,MALDIquantForeign, reshape2, stringr, OrgMassSpecR
+RoxygenNote: 6.0.1
