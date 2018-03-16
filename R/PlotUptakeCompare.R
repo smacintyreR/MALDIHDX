@@ -5,30 +5,32 @@ PlotUptakeCompare <- function(pepnum,pepIDS = peptide.identifications,CentsCondi
 
 
   # Add the theoretical undeuterated
-  UnCent <- pepIDS[pepnum,18]
+  #UnCent <- pepIDS[pepnum,18]
 
   # HDX Uptake values
-  CentsCond1Mod <- rbind(as.data.frame(CentsCondit1[,2]),UnCent)
+  #CentsCond1Mod <- rbind(as.data.frame(CentsCondit1[,2]),UnCent)
 
-  UptakesCond1 <- CentsCond1Mod - CentsCond1Mod[7,]
+  UptakesCond1 <- CentsCondit1 - CentsCondit1[1,]
 
   # HDX Uptake values
-  CentsCond2Mod <- rbind(as.data.frame(CentsCondit2[,2]),UnCent)
+  
+  
+  #CentsCond2Mod <- rbind(as.data.frame(CentsCondit2[,2]),UnCent)
 
-  UptakesCond2 <- CentsCond2Mod - CentsCond2Mod[7,]
+  UptakesCond2 <- CentsCondit2 - CentsCondit2[1,]
 
   xmax <- times[noTimes] + 3
   YmaxTh <- pepIDS[pepnum,15]
 
   YvalueMax <- max(YmaxTh,max(UptakesCond2))
   # Plotting
-  plot(times,UptakesCond1[,1],log='x',ylim = c(0,YvalueMax),col = "blue",pch=4,ylab="Relative Deuterium Uptake (AMU)",xlab = "Time (minutes)",main = paste("Back Exchange Peptide",as.character(pepnum),"Temperature Dependence",sep="_"))
-  points(times,UptakesCond2[,1],col="red",pch=3)
+  plot(times,UptakesCond1[,1],log='x',ylim = c(0,YvalueMax),col = "blue",pch=4,ylab="Relative Deuterium Uptake (AMU)",xlab = "Time (seconds)",main = paste("Back Exchange Peptide",as.character(pepnum),"Flag Binding",sep="_"),type="b")
+  points(times,UptakesCond2[,1],col="red",pch=3,type="b")
 
   abline(h = YmaxTh,col="blue",lty =2)
-  text(times[noTimes]-60, YmaxTh - 0.25, "Theoretical Maximum Uptake", col = "blue",cex = 0.75)
+  text(times[noTimes]-3555, YmaxTh - 0.25, "Theoretical Maximum Uptake", col = "blue",cex = 0.75)
 
-  legend('bottomleft',c(expression(paste("0 ",degree,"C")),expression(paste("- 20 ",degree,"C"))),
+  legend('topright',c("Unbound","Bound"),
          pch=c(4,3),col=c('red','blue'))
 
 
