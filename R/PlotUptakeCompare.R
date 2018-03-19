@@ -1,4 +1,4 @@
-PlotUptakeCompare <- function(pepnum, pep.ids = peptide.identifications,
+PlotUptakeCompare <- function(pep.num, pep.ids = peptide.identifications,
                               all.cents, times,
                               conditions = c("Bound","Unbound")){
 
@@ -22,7 +22,7 @@ PlotUptakeCompare <- function(pepnum, pep.ids = peptide.identifications,
     
   # Set plot dimensions
   x.max <- times[no.times] + 3
-  y.max.th <- pep.ids[pepnum, 15]
+  y.max.th <- pep.ids[pep.num, 15]
   y.value.max <- max(y.max.th, max(uptakes.cond.2))
     
   # Plot the uptake curves 
