@@ -1,4 +1,4 @@
-PlotUptakeCompare <- function(pepnum,pepIDS = peptide.identifications,AllCents,times){
+PlotUptakeCompare <- function(pepnum,pepIDS = peptide.identifications,AllCents,times,Conditions = c("Bound","Unbound")){
 
     
   NoRep <- length(AllCents)/2
@@ -37,7 +37,7 @@ PlotUptakeCompare <- function(pepnum,pepIDS = peptide.identifications,AllCents,t
   abline(h = YmaxTh,col="blue",lty =2)
   text(times[noTimes]-3555, YmaxTh - 0.25, "Theoretical Maximum Uptake", col = "blue",cex = 0.75)
 
-  legend('topright',c("Bound","Unbound"),
+  legend('topright',Conditions,
          pch=c(3,4),col=c('red','blue'))
 
 
