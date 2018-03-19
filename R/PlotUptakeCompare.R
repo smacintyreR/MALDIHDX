@@ -8,6 +8,9 @@ PlotUptakeCompare <- function(pepnum,pepIDS = peptide.identifications,AllCents,t
   AvCentsCondit1 <- AvCent(CentsCondit1)
   AvCentsCondit2 <- AvCent(CentsCondit2)
 
+  
+  times <- as.numeric(as.vector(CentsCondit1[[1]][,1]))
+  times[1] <- 1
   noTimes <- length(times)
 
 
@@ -39,8 +42,5 @@ PlotUptakeCompare <- function(pepnum,pepIDS = peptide.identifications,AllCents,t
 
   legend('topright',Conditions,
          pch=c(3,4),col=c('red','blue'))
-
-
-
 
 }
