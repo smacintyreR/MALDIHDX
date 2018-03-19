@@ -1,5 +1,12 @@
-PlotUptakeCompare <- function(pepnum,pepIDS = peptide.identifications,CentsCondit1,CentsCondit2,times){
+PlotUptakeCompare <- function(pepnum,pepIDS = peptide.identifications,AllCents,times){
 
+    
+  NoRep <- length(AllCents)/2
+  CentsCondit1 <- AllCents[1:NoRep]
+  CentsCondit2 <- AllCents[(NoRep+1):2*NoRep]
+  
+  AvCentsCondit1 <- AvCent(CentsCondit1)
+  AvCentsCondit2 <- AvCent(CentsCondit2)
 
   noTimes <- length(times)
 
@@ -10,14 +17,14 @@ PlotUptakeCompare <- function(pepnum,pepIDS = peptide.identifications,CentsCondi
   # HDX Uptake values
   #CentsCond1Mod <- rbind(as.data.frame(CentsCondit1[,2]),UnCent)
 
-  UptakesCond1 <- CentsCondit1 - CentsCondit1[1,]
+  UptakesCond1 <- AvCentsCondit1 - AvCentsCondit1[1,]
 
   # HDX Uptake values
   
   
   #CentsCond2Mod <- rbind(as.data.frame(CentsCondit2[,2]),UnCent)
 
-  UptakesCond2 <- CentsCondit2 - CentsCondit2[1,]
+  UptakesCond2 <- AvCentsCondit2 - AvCentsCondit2[1,]
 
   xmax <- times[noTimes] + 3
   YmaxTh <- pepIDS[pepnum,15]
@@ -30,8 +37,8 @@ PlotUptakeCompare <- function(pepnum,pepIDS = peptide.identifications,CentsCondi
   abline(h = YmaxTh,col="blue",lty =2)
   text(times[noTimes]-3555, YmaxTh - 0.25, "Theoretical Maximum Uptake", col = "blue",cex = 0.75)
 
-  legend('topright',c("Unbound","Bound"),
-         pch=c(4,3),col=c('red','blue'))
+  legend('topright',c("Bound","Unbound"),
+         pch=c(3,4),col=c('red','blue'))
 
 
 
