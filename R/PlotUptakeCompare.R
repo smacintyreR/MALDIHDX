@@ -19,7 +19,7 @@ PlotUptakeCompare <- function(pep.num, pep.ids = peptide.identifications,
   # Calculate uptake values from centroids
   uptakes.cond.1 <- av.cents.condit.1 - av.cents.condit.1[1, ]
   uptakes.cond.2 <- av.cents.condit.2 - av.cents.condit.2[1, ]
-    
+       
   # Set plot dimensions
   x.max <- times[no.times] + 3
   y.max.th <- pep.ids[pep.num, 15]
