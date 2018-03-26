@@ -1,11 +1,14 @@
 # Plotting functions for HX - Macspress
 
-# First plot mass spectrum
-
-
-
-# Peaks and Linear Interpolation
-
+#' Linear Interpolation Plotting Function
+#' @description  Given the linear interpolation data and the mass peaks,
+#' plots both over the spectrum
+#' @param peaks list of mass peaks
+#' @keywords linear,interpolation, plot, peaks
+#' @author Sam MacIntyre \email{smacintyre@@csiro.au}
+#' @export
+#' @examples
+#' plotLin(interp,peaks)
 plotLin <- function(interp,peaks){
   points(peaks,col="red",lwd=4)
   lines(interp,col="red")
