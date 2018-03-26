@@ -256,7 +256,8 @@ mainCentMerge <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time=0
       }
 
       else{
-        manualCentroids2(s,i,j,TimeP,masses)
+          c[i] <-manualCentroids2(s,i,j,TimeP,masses)[1]
+          
       }
       #dev.off()
 
