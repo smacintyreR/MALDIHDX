@@ -8,6 +8,7 @@
 #' @export
 #' @examples
 #' p <- peakPick(s)
+
 peakPick <- function(spectrum,SNR=10){
 
 
@@ -186,9 +187,6 @@ centroidCalc <- function(v,spectrum){
 #' @examples
 #' x <- linearsolve(p1,p2,value)
 
-
-
-
 linearsolve <- function(p1,p2,value){
   x1 <- p1[1]
   y1 <- p1[2]
@@ -214,8 +212,6 @@ linearsolve <- function(p1,p2,value){
 #' @examples
 #' interp <- linearInterp(peaks)
 
-
-
 linearInterp <- function(peaks){
 
   peaksmod <-cbind(mass(peaks),intensity(peaks))
@@ -225,7 +221,16 @@ linearInterp <- function(peaks){
 
 }
 
-
+#' Recursive Appending Function
+#' @description  Given a list, recursively replicates the list for a given
+#' n 
+#' @param list any list
+#' @param n number of times to replicate
+#' @keywords replicate, append, recursive 
+#' @author Sam MacIntyre \email{smacintyre@@csiro.au}
+#' @export
+#' @examples
+#' newlist <- RecursAppend(list,4)
 
 RecursAppend <- function(list,n){
 
