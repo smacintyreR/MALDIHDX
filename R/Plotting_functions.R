@@ -83,25 +83,7 @@ plotUptake <- function(pep1,pep2){
 }
 
 
-plotUptake <- function(pep1,pep2){
 
-  # Modify tables
-  new1 <- pep1
-  new2 <- pep2
-  new1[,1] <- as.numeric(as.character(new1[,1]))
-  new2[,1] <- as.numeric(as.character(new2[,1]))
-  new1 <- new1[-1,]
-  new2 <- new2[-1,]
-  new1 <- new1[-dim(new1)[1],]
-  new2 <- new2[-dim(new2)[1],]
-
-  plot(new1[,1],new1[,3],type='b',xlab='Time (min)',ylab = 'Relative Deuterium Uptake (Da)', main = "Deuterium Level",log="x",col="red",pch=4,ylim=c(0,14))
-  lines(new2[,1],new2[,3],type='b',col="green",pch=3)
-
-  legend('topleft',c('mutant','wild type'),
-         lty=1,lwd=c(1,1),col=c('red','green'))
-
-}
 
 # Uses all of the plot functions to plot and save all of the centroided, peakwidthed spectra
 # Inefficient at the momemt given it recalculates centroids etc
