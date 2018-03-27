@@ -4,6 +4,7 @@
 #' @description  Given the linear interpolation data and the mass peaks,
 #' plots both over the spectrum
 #' @param peaks list of mass peaks
+#' @param interp vector of points of linear interpolation
 #' @keywords linear,interpolation, plot, peaks
 #' @author Sam MacIntyre \email{smacintyre@@csiro.au}
 #' @export
@@ -14,7 +15,16 @@ plotLin <- function(interp,peaks){
   lines(interp,col="red")
 }
 
-# Width segment
+
+
+#' Width plotting function
+#' @description  Given the width vector, plots a horizontal width line 
+#' across the current spectrum
+#' @param v vector containing qidth
+#' @keywords width, plot, segment   
+#' @author Sam MacIntyre \email{smacintyre@@csiro.au}
+#' @export
+#' @examples
 
 plotWidth <- function(v){
   a <- v[1]
@@ -24,7 +34,15 @@ plotWidth <- function(v){
   segments(a,envelope,b,envelope,col="orange",lwd=4)
 }
 
-# Centroid segment
+#' Centroid plotting function
+#' @description Given the value of the centroid and the spectrum, plots
+#' the centroid
+#' @param cent centroid value 
+#' @param s spectrum
+#' @keywords centroid, plot, segment
+#' @author Sam MacIntyre \email{smacintyre@@csiro.au}
+#' @export
+#' @examples
 
 centroidPlot <- function(cent,s){
   segments(cent,0,cent,max(intensity(s)),col="green",lwd=4)
@@ -34,7 +52,16 @@ centroidPlot <- function(cent,s){
 
 
 
-# Plots the Deuterium uptake curves for the two states
+#' Centroid plotting function
+#' @description Given the value of the centroid and the spectrum, plots
+#' the centroid
+#' @param cent centroid value 
+#' @param s spectrum
+#' @keywords centroid, plot, segment
+#' @author Sam MacIntyre \email{smacintyre@@csiro.au}
+#' @export
+#' @examples
+
 plotUptake <- function(pep1,pep2){
 
   # Modify tables
