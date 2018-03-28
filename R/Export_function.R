@@ -212,8 +212,9 @@ setwd(curDir)
 
 mainCentMerge <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time=0){
 
-  Samples <- unique(samplematrix[,1]) #List of Samples (E.g A1,A2...)
-  NoSamples <- length(Samples)  #Number of technical replicates
+  Samples <- samplematrix[,1]
+  SamplesU <- unique(Samples) #List of Samples (E.g A1,A2...)
+  NoSamples <- length(SamplesU)  #Number of technical replicates
   w <- c() # vector to hold widths
   cp <- c() #Vector to hold positional centroid
   c <- c() # Vector to h0ld reported centroid
@@ -243,7 +244,7 @@ mainCentMerge <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time=0
       interp <- linearInterp(p)
 
       #png(filename = paste(masses[1],"CentroidPlot","Sample",j,"-Time",TimeP[i],".png",sep=''))
-      plot(s,main=paste("Sample",j,"Time",TimeP[i],sep=" "))
+      plot(s,main=paste("Sample",Samples[index],"Time",TimeP[i],sep=" "))
       plotLin(interp,p)
       plotWidth(v)
       centroidPlot(cp[i],s)
