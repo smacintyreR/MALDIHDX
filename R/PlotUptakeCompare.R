@@ -1,6 +1,7 @@
 PlotUptakeCompare <- function(pep.num, pep.ids = peptide.identifications,
                               all.cents, times,
-                              conditions = c("Bound","Unbound")){
+                              conditions = c("Bound","Unbound"),
+                              exp.name = "HDX Experiment"){
 
   # Separate centroids based on experimental conditions
   rep.no <- length(all.cents)/2
@@ -29,12 +30,12 @@ PlotUptakeCompare <- function(pep.num, pep.ids = peptide.identifications,
   plot(times, uptakes.cond.1[, 1], log = 'x',ylim = c(0, y.value.max), 
        col = "blue", pch = 4, ylab = "Relative Deuterium Uptake (AMU)",
        xlab = "Time (seconds)", main = paste("Back Exchange Peptide",
-    as.character(pepnum), "Flag Binding", sep="_"), type = "b")
+    as.character(pep.num), exp.name, sep="_"), type = "b")
   points(times,uptakes.cond.2[,1],col="red",pch=3,type="b")
   abline(h = y.max.th, col="blue", lty=2)
     
   # Add label and legend
-  text(times[no.times] - 3555, y.max.th - 0.25, "Theoretical Maximum Uptake", 
+  text(times[no.times] - 3555, y.max.th - 0.75, "Theoretical Maximum Uptake", 
   col = "blue", cex = 0.75)
   legend('topright', conditions, pch=c(3,4), col=c('red','blue'))
 }
