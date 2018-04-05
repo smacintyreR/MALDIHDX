@@ -236,6 +236,8 @@ mainCentMerge <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time=0
       index <- i+(j-1)*noTimeP
       s <- createMassSpectrum(mass=masses,intensity=as.numeric(new[index,]))
       p <- peakPick(s,SNR=SNR)
+      
+      if(length(p) > 1){
       v <- widthFinder(p,s,bpint)
       w[i] <- (v[2]-v[1])*charge
       cp[i] <- centroidCalc(v,s)
@@ -266,6 +268,16 @@ mainCentMerge <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time=0
           c[i] <-manualCentroids2(s,i,j,TimeP,masses)[1]
           flag[i] <- F
       }
+      }
+      
+      else{
+          plot(s,main=paste("Sample",Samples[index],"Time",TimeP[i],sep=" "))
+          cat ("This centroid will be flagged, press [enter] to continue:")
+          line <- readline()
+          flag[i] <- T
+          c[i] <- 0
+          w[i] <- 0
+      }
       #dev.off()
 
     }
@@ -274,7 +286,8 @@ mainCentMerge <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time=0
     summary[,2] <- as.numeric(as.character(summary[,2]))
     summary[,3] <- summary[,2] - summary[1,2]
     summary[,4] <- w
-    colnames(summary) <- c("time (min)","centroid (Da)","Rel D Lvl (Da)","width (Da)")
+    summary[,5] <- flag
+    colnames(summary) <- c("time (min)","centroid (Da)","Rel D Lvl (Da)","width (Da)","FlAGGED")
     out[[j]] <- summary
   }
 
