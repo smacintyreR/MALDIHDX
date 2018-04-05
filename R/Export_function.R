@@ -218,6 +218,7 @@ mainCentMerge <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time=0
   w <- c() # vector to hold widths
   cp <- c() #Vector to hold positional centroid
   c <- c() # Vector to h0ld reported centroid
+  flag <- c() # vector to hold flagged centroid data
   TimeP <- unique(samplematrix[,2]) # The time points for this experiment
   noTimeP <- length(TimeP) # Number of time points
   new <- samplematrix[,-c(1,2)] # Remove column 1&2
@@ -250,15 +251,20 @@ mainCentMerge <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time=0
       centroidPlot(cp[i],s)
       legend('topright',c('Spectrum','Distribution Width','Centroid','Peak envelope'),
              lty=1,lwd=c(1,4,4,1),col=c('black','orange','green','red'))
-      cat ("Press [Y] if satisfied with centroid, [N] if require manual editing: ")
+      cat ("Press [Y] if satisfied with centroid, [N] if require manual editing, [F] to flag centroid: ")
       line <- readline()
       if(line=="Y"){
-
+          flag[i] <- F
       }
+      
+      else if(line == "F"){
+          flag[i] <- T  
+      }
+      
 
       else{
           c[i] <-manualCentroids2(s,i,j,TimeP,masses)[1]
-          
+          flag[i] <- F
       }
       #dev.off()
 
