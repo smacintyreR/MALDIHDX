@@ -11,7 +11,6 @@
 
 peakPick <- function(spectrum,SNR=10){
 
-
   peaks <- detectPeaks(spectrum,SNR=SNR)
 
   return(peaks)
@@ -192,12 +191,22 @@ linearsolve <- function(p1,p2,value){
   y1 <- p1[2]
   x2 <- p2[1]
   y2 <- p2[2]
-
+  
   m <- (y2-y1)/(x2-x1)
+  
+  
+  if(m != 0){
+
 
   x <- (value - y1 +m*x1)/m
-
+  
   return(x)
+  }
+  
+  else{
+      stop("Error: gradient cannot be equal to 0")
+  }
+
 }
 
 
