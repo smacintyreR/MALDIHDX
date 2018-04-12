@@ -182,3 +182,26 @@ import.identifications = function (path = getwd(),filename = "Scaffold.txt"){
   gc()
   return(PepIDs)
 }
+
+
+DFtoSpec <- function(peptideTable){
+    
+    samples <- peptideTable[,1]
+    TP <- peptideTable[,2]
+    
+    new <- peptideTable[,-c(1,2)]
+    spectra <- list()
+    
+    Index <- dim(peptideTable)[1]
+    
+    for(i in 1:Index){
+        
+        spectra[[i]] <- createMassSpectrum(as.numeric(colnames(new)),as.numeric(new[i,]),metaData = list(StateRep = samples[i],time=TP[i]))
+        
+    }
+    
+    return(spectra)
+    
+    
+    
+}
