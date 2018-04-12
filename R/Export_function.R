@@ -20,6 +20,7 @@ AvCent <- function(AllpeptideSamples){
 
 
   colnames(AvVec)<-"Average Centroid"
+  
 
   return(AvVec)
 
