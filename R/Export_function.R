@@ -104,87 +104,87 @@ manualCentroids2 <- function(spectrum,i,j,TimeP,mass,bpint=0.5){
 
 
 mainCentNewMod <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time=0){
-
-  Samples <- unique(samplematrix[,1])
-  NoSamples <- length(Samples)  #Equal to 3 here
-  w <- c() # vector to hold widths
-  cp <- c() #Vector to hold positional centroid
-  c <- c()
-  TimeP <- unique(samplematrix[,2]) # The time points for this experiment
-  noTimeP <- length(TimeP) #Number of time points
-  new <- samplematrix[,-c(1,2)]
-  masses <- as.numeric(colnames(new))
-
-
-  out <- list()
-  curDir <- getwd()
-  dir.create(paste("Peptide",masses[1],"Centroid","Plots",sep="_"))
-  setwd(paste("Peptide",masses[1],"Centroid","Plots",sep="_"))
-
-
-
-  for (j in 1:NoSamples){
-
-    for(i in 1:noTimeP){
-
-      index <- i+(j-1)*noTimeP
-      s <- createMassSpectrum(mass=masses,intensity=as.numeric(new[index,]))
-      p <- peakPick(s,SNR)
-      v <- widthFinder(p,s,bpint)
-      w[i] <- (v[2]-v[1])*charge
-      cp[i] <- centroidCalc(v,s)
-
-      c[i] <- cp[i]
-
-      interp <- linearInterp(p)
-
-      pdf(paste(masses[1],"CentroidPlot","Sample",j,"-Time",TimeP[i],".pdf",sep=''))
-      plot(s,main=paste("Sample",j,"Time",TimeP[i],sep=" "))
-      plotLin(interp,p)
-      plotWidth(v)
-      centroidPlot(cp[i],s)
-      legend('topright',c('Spectrum','Distribution Width','Centroid','Peak envelope'),
-             lty=1,lwd=c(1,4,4,1),col=c('black','orange','green','red'))
-      dev.off()
-
+    
+    Samples <- unique(samplematrix[,1])
+    NoSamples <- length(Samples)  #Equal to 3 here
+    w <- c() # vector to hold widths
+    cp <- c() #Vector to hold positional centroid
+    c <- c()
+    TimeP <- unique(samplematrix[,2]) # The time points for this experiment
+    noTimeP <- length(TimeP) #Number of time points
+    new <- samplematrix[,-c(1,2)]
+    masses <- as.numeric(colnames(new))
+    
+    
+    out <- list()
+    curDir <- getwd()
+    dir.create(paste("Peptide",masses[1],"Centroid","Plots",sep="_"))
+    setwd(paste("Peptide",masses[1],"Centroid","Plots",sep="_"))
+    
+    
+    
+    for (j in 1:NoSamples){
+        
+        for(i in 1:noTimeP){
+            
+            index <- i+(j-1)*noTimeP
+            s <- createMassSpectrum(mass=masses,intensity=as.numeric(new[index,]))
+            p <- peakPick(s,SNR)
+            v <- widthFinder(p,s,bpint)
+            w[i] <- (v[2]-v[1])*charge
+            cp[i] <- centroidCalc(v,s)
+            
+            c[i] <- cp[i]
+            
+            interp <- linearInterp(p)
+            
+            pdf(paste(masses[1],"CentroidPlot","Sample",j,"-Time",TimeP[i],".pdf",sep=''))
+            plot(s,main=paste("Sample",j,"Time",TimeP[i],sep=" "))
+            plotLin(interp,p)
+            plotWidth(v)
+            centroidPlot(cp[i],s)
+            legend('topright',c('Spectrum','Distribution Width','Centroid','Peak envelope'),
+                   lty=1,lwd=c(1,4,4,1),col=c('black','orange','green','red'))
+            dev.off()
+            
+        }
+        summary <- cbind(TimeP,c)
+        summary <- as.data.frame(summary)
+        summary[,2] <- as.numeric(as.character(summary[,2]))
+        summary[,3] <- summary[,2] - summary[1,2]
+        summary[,4] <- w
+        colnames(summary) <- c("time (min)","centroid (Da)","Rel D Lvl (Da)","width (Da)")
+        out[[j]] <- summary
     }
-    summary <- cbind(TimeP,c)
-    summary <- as.data.frame(summary)
-    summary[,2] <- as.numeric(as.character(summary[,2]))
-    summary[,3] <- summary[,2] - summary[1,2]
-    summary[,4] <- w
-    colnames(summary) <- c("time (min)","centroid (Da)","Rel D Lvl (Da)","width (Da)")
-    out[[j]] <- summary
-  }
-
-setwd(curDir)
-
-dir.create(paste("Peptide",masses[1],"Uptake","Plots",sep="_"))
-setwd(paste("Peptide",masses[1],"Uptake","Plots",sep="_"))
-
-noRep <- NoSamples/2  # Assuming a two state experiment
-
-Unbound <- out[1:noRep]
-Bound <- out[(noRep+1):NoSamples]
-
-times <- out[[1]][,1]
-
-AvCentsUnbound <- AvCent(Unbound)
-AvCentsBound <- AvCent(Bound)
-
-png(paste(masses[1],"UptakePlot1",".png",sep=''))
-
-plotUptakeUpdated(AvCentsUnbound[[1]],AvCentsBound[[1]],times)
-
-dev.off()
-
-setwd(curDir)
-
-
-
-
-  return(out)
-
+    
+    setwd(curDir)
+    
+    dir.create(paste("Peptide",masses[1],"Uptake","Plots",sep="_"))
+    setwd(paste("Peptide",masses[1],"Uptake","Plots",sep="_"))
+    
+    noRep <- NoSamples/2  # Assuming a two state experiment
+    
+    Unbound <- out[1:noRep]
+    Bound <- out[(noRep+1):NoSamples]
+    
+    times <- out[[1]][,1]
+    
+    AvCentsUnbound <- AvCent(Unbound)
+    AvCentsBound <- AvCent(Bound)
+    
+    png(paste(masses[1],"UptakePlot1",".png",sep=''))
+    
+    plotUptakeUpdated(AvCentsUnbound[[1]],AvCentsBound[[1]],times)
+    
+    dev.off()
+    
+    setwd(curDir)
+    
+    
+    
+    
+    return(out)
+    
 }
 
 
@@ -212,87 +212,138 @@ setwd(curDir)
 
 
 mainCentMerge <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time=0){
-
-  Samples <- samplematrix[,1]
-  SamplesU <- unique(Samples) #List of Samples (E.g A1,A2...)
-  NoSamples <- length(SamplesU)  #Number of technical replicates
-  w <- c() # vector to hold widths
-  cp <- c() #Vector to hold positional centroid
-  c <- c() # Vector to h0ld reported centroid
-  flag <- c() # vector to hold flagged centroid data
-  TimeP <- unique(samplematrix[,2]) # The time points for this experiment
-  noTimeP <- length(TimeP) # Number of time points
-  new <- samplematrix[,-c(1,2)] # Remove column 1&2
-  masses <- as.numeric(colnames(new)) # Extract masses
-
-  # Initialise list for summary tables for each replicate
-  out <- list()
-
-
-
-  for (j in 1:NoSamples){
-
-    for(i in 1:noTimeP){
-
-      index <- i+(j-1)*noTimeP
-      s <- createMassSpectrum(mass=masses,intensity=as.numeric(new[index,]))
-      p <- peakPick(s,SNR=SNR)
-      
-      if(length(p) > 1){
-      v <- widthFinder(p,s,bpint)
-      w[i] <- (v[2]-v[1])*charge
-      cp[i] <- centroidCalc(v,s)
-
-      c[i] <- cp[i]
-
-      interp <- linearInterp(p)
-
-      #png(filename = paste(masses[1],"CentroidPlot","Sample",j,"-Time",TimeP[i],".png",sep=''))
-      plot(s,main=paste("Sample",Samples[index],"Time",TimeP[i],sep=" "))
-      plotLin(interp,p)
-      plotWidth(v)
-      centroidPlot(cp[i],s)
-      legend('topright',c('Spectrum','Distribution Width','Centroid','Peak envelope'),
-             lty=1,lwd=c(1,4,4,1),col=c('black','orange','green','red'))
-      cat ("Press [Y] if satisfied with centroid, [N] if require manual editing, [F] to flag centroid: ")
-      line <- readline()
-      if(line=="Y"){
-          flag[i] <- F
-      }
-      
-      else if(line == "F"){
-          flag[i] <- T  
-      }
-      
-
-      else{
-          c[i] <-manualCentroids2(s,i,j,TimeP,masses)[1]
-          flag[i] <- F
-      }
-      }
-      
-      else{
-          plot(s,main=paste("Sample",Samples[index],"Time",TimeP[i],sep=" "))
-          cat ("This centroid will be flagged, press [enter] to continue:")
-          line <- readline()
-          flag[i] <- T
-          c[i] <- 0
-          w[i] <- 0
-      }
-      #dev.off()
-
+    
+    Samples <- samplematrix[,1]
+    SamplesU <- unique(Samples) #List of Samples (E.g A1,A2...)
+    NoSamples <- length(SamplesU)  #Number of technical replicates
+    w <- c() # vector to hold widths
+    cp <- c() #Vector to hold positional centroid
+    c <- c() # Vector to h0ld reported centroid
+    flag <- c() # vector to hold flagged centroid data
+    TimeP <- unique(samplematrix[,2]) # The time points for this experiment
+    noTimeP <- length(TimeP) # Number of time points
+    new <- samplematrix[,-c(1,2)] # Remove column 1&2
+    masses <- as.numeric(colnames(new)) # Extract masses
+    
+    # Initialise list for summary tables for each replicate
+    out <- list()
+    
+    
+    
+    for (j in 1:NoSamples){
+        
+        for(i in 1:noTimeP){
+            
+            index <- i+(j-1)*noTimeP
+            s <- createMassSpectrum(mass=masses,intensity=as.numeric(new[index,]))
+            p <- peakPick(s,SNR=SNR)
+            
+            if(length(p) > 1){
+                v <- widthFinder(p,s,bpint)
+                w[i] <- (v[2]-v[1])*charge
+                cp[i] <- centroidCalc(v,s)
+                
+                c[i] <- cp[i]
+                
+                interp <- linearInterp(p)
+                
+                #png(filename = paste(masses[1],"CentroidPlot","Sample",j,"-Time",TimeP[i],".png",sep=''))
+                plot(s,main=paste("Sample",Samples[index],"Time",TimeP[i],sep=" "))
+                plotLin(interp,p)
+                plotWidth(v)
+                centroidPlot(cp[i],s)
+                legend('topright',c('Spectrum','Distribution Width','Centroid','Peak envelope'),
+                       lty=1,lwd=c(1,4,4,1),col=c('black','orange','green','red'))
+                cat ("Press [Y] if satisfied with centroid, [N] if require manual editing, [F] to flag centroid: ")
+                line <- readline()
+                if(line=="Y"){
+                    flag[i] <- F
+                }
+                
+                else if(line == "F"){
+                    flag[i] <- T  
+                }
+                
+                
+                else{
+                    c[i] <-manualCentroids2(s,i,j,TimeP,masses)[1]
+                    flag[i] <- F
+                }
+            }
+            
+            else{
+                plot(s,main=paste("Sample",Samples[index],"Time",TimeP[i],sep=" "))
+                cat ("This centroid will be flagged, press [enter] to continue:")
+                line <- readline()
+                flag[i] <- T
+                c[i] <- 0
+                w[i] <- 0
+            }
+            #dev.off()
+            
+        }
+        summary <- cbind(TimeP,c)
+        summary <- as.data.frame(summary)
+        summary[,2] <- as.numeric(as.character(summary[,2]))
+        summary[,3] <- summary[,2] - summary[1,2]
+        summary[,4] <- w
+        summary[,5] <- flag
+        colnames(summary) <- c("time (min)","centroid (Da)","Rel D Lvl (Da)","width (Da)","FlAGGED")
+        out[[j]] <- summary
     }
-    summary <- cbind(TimeP,c)
-    summary <- as.data.frame(summary)
-    summary[,2] <- as.numeric(as.character(summary[,2]))
-    summary[,3] <- summary[,2] - summary[1,2]
-    summary[,4] <- w
-    summary[,5] <- flag
-    colnames(summary) <- c("time (min)","centroid (Da)","Rel D Lvl (Da)","width (Da)","FlAGGED")
-    out[[j]] <- summary
-  }
+    
+    
+    return(out)
+    
+}
 
 
-  return(out)
 
+
+
+
+
+mainCentNewMod2 <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time=0){
+    
+    Samples <- unique(samplematrix[,1])
+    NoSamples <- length(Samples)  #Equal to 3 here
+    w <- c() # vector to hold widths
+    cp <- c() #Vector to hold positional centroid
+    c <- c()
+    TimeP <- unique(samplematrix[,2]) # The time points for this experiment
+    noTimeP <- length(TimeP) #Number of time points
+    new <- samplematrix[,-c(1,2)]
+    masses <- as.numeric(colnames(new))
+    
+    
+    out <- list()
+    
+    for (j in 1:NoSamples){
+        
+        for(i in 1:noTimeP){
+            
+            index <- i+(j-1)*noTimeP
+            s <- createMassSpectrum(mass=masses,intensity=as.numeric(new[index,]))
+            p <- peakPick(s,SNR)
+            v <- widthFinder(p,s,bpint)
+            w[i] <- (v[2]-v[1])*charge
+            cp[i] <- centroidCalc(v,s)
+            
+            c[i] <- cp[i]
+            
+            interp <- linearInterp(p)
+            
+        }
+        
+        summary <- cbind(TimeP,c)
+        summary <- as.data.frame(summary)
+        summary[,2] <- as.numeric(as.character(summary[,2]))
+        summary[,3] <- summary[,2] - summary[1,2]
+        summary[,4] <- w
+        colnames(summary) <- c("time (min)","centroid (Da)","Rel D Lvl (Da)","width (Da)")
+        out[[j]] <- summary
+    }
+    
+    return(out)
+    
 }
