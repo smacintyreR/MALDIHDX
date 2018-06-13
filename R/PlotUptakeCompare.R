@@ -20,33 +20,51 @@ PlotUptakeCompare <- function(pep.num, pep.ids = peptide.identifications,
   # Calculate uptake values from centroids
   uptakes.cond.1 <- av.cents.condit.1 - av.cents.condit.1[1, ]
   uptakes.cond.2 <- av.cents.condit.2 - av.cents.condit.2[1, ]
-       
-  # Set plot dimensions
-  x.max <- times[no.times] + 3
-  y.max.th <- pep.ids[pep.num, 15]
   
+  UptakesDF <- data.frame(cbind(times,uptakes.cond.1,uptakes.cond.2))
+  colnames(UptakesDF) <- c("times","Unbound","Bound")
   
-  y.value.max <- max(max(uptakes.cond.1), max(uptakes.cond.2))
+  UptakesDFMelt <- melt(UptakesDF,id="times")
+  
+  m <- ggplot(data=UptakesDFMelt, aes(x=times, y=value, color=variable)) +
+      geom_line(size=2) + scale_x_continuous(trans='log',breaks=times)+
+      geom_point(aes(shape=variable),size=4,show.legend = F)+
+      labs(title=paste("HDX Experiment Peptide",peptide.identifications[pep.num,3],sep=" "),x="Time (seconds)",y="Relative Deuterium Uptake (AMU)",color="State")+
+      theme(panel.background = element_blank()) +
+      theme_classic()+
+      theme(
+            plot.title=element_text(size=15, face="bold"))
+  
 
-  if(is.finite(y.value.max)){
-      
-      y.value.max <- y.value.max + 2
-  }
+  print(m)
   
-  else{
-      y.value.max <- 15 
-  }
+}
+  # Set plot dimensions
+  #x.max <- times[no.times] + 3
+  #y.max.th <- pep.ids[pep.num, 15]
+  
+  
+  #y.value.max <- max(max(uptakes.cond.1), max(uptakes.cond.2))
+
+  #if(is.finite(y.value.max)){
+      
+   #   y.value.max <- y.value.max + 0.1*y.value.max
+  #}
+  
+  #else{
+   #   y.value.max <- 15 
+  #}
     
   # Plot the uptake curves 
-  plot(times, uptakes.cond.1[, 1], log = 'x',ylim = c(0, y.value.max), 
-       col = "blue", pch = 4, ylab = "Relative Deuterium Uptake (AMU)",
-       xlab = "Time (seconds)", main = paste("Back Exchange Peptide",
-    as.character(pep.num), exp.name, sep="_"), type = "b")
-  points(times,uptakes.cond.2[,1],col="red",pch=3,type="b")
-  abline(h = y.max.th, col="blue", lty=2)
+  #plot(times, uptakes.cond.1[, 1], log = 'x', ylim=c(0,y.value.max),
+   #    col = "blue", pch = 4, ylab = "Relative Deuterium Uptake (AMU)",
+    #   xlab = "Time (seconds)", main = paste("Back Exchange Peptide",
+    #as.character(pep.num), exp.name, sep="_"), type = "b")
+  #points(times,uptakes.cond.2[,1],col="red",pch=3,type="b")
+  #abline(h = y.max.th, col="blue", lty=2)
     
   # Add label and legend
-  text(times[no.times] - 3555, y.max.th - 0.75, "Theoretical Maximum Uptake", 
-  col = "blue", cex = 0.75)
-  legend('topright', conditions, pch=c(3,4), col=c('red','blue'))
-}
+  #text(times[no.times] - 3555, y.max.th - 0.75, "Theoretical Maximum Uptake", 
+  #col = "blue", cex = 0.75)
+  #legend('topright', conditions, pch=c(3,4), col=c('red','blue'))
+#}
