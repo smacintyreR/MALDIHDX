@@ -162,7 +162,6 @@ MEMHDXformat <- function(Centroids,IDs,pepno,bound = TRUE){
     # Number of Timepoints
     noTime <- dim(Centroids[[1]])[1]
     
-    
     # Create 0 matrix with appropriate dimensions
     CentroidMatrix <- matrix(0,noTime*noRep,5)
     CentroidMatrix <- as.data.frame(CentroidMatrix)
@@ -177,7 +176,6 @@ MEMHDXformat <- function(Centroids,IDs,pepno,bound = TRUE){
             CentroidMatrix[k,2] <- as.character(Centroids[[j]][i,1])
             
         }
-        
     }
     
     

@@ -29,7 +29,7 @@ PlotUptakeCompare <- function(pep.num, pep.ids = peptide.identifications,
   m <- ggplot(data=UptakesDFMelt, aes(x=times, y=value, color=variable)) +
       geom_line(size=2) + scale_x_continuous(trans='log',breaks=times)+
       geom_point(aes(shape=variable),size=4,show.legend = F)+
-      labs(title=paste("HDX Experiment Peptide",peptide.identifications[pep.num,3],sep=" "),x="Time (seconds)",y="Relative Deuterium Uptake (AMU)",color="State")+
+      labs(title=paste("HDX Experiment Peptide",pep.ids[pep.num,4],sep=" "),x="Time (seconds)",y="Relative Deuterium Uptake (AMU)",color="State")+
       theme(panel.background = element_blank()) +
       theme_classic()+
       theme(

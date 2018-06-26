@@ -11,20 +11,20 @@
 
 
 AvCent <- function(AllpeptideSamples){
-
-  numSam <- length(AllpeptideSamples)
-  numTime <- dim(AllpeptideSamples[[1]])[1]
-
-  AvVec <- rowMeans(cbind(AllpeptideSamples[[1]][,2],AllpeptideSamples[[2]][,2],AllpeptideSamples[[3]][,2]))
-  AvVec <- as.data.frame(AvVec)
-
-
-  colnames(AvVec)<-"Average Centroid"
-  
-
-  return(AvVec)
-
-
+    
+    numSam <- length(AllpeptideSamples)
+    numTime <- dim(AllpeptideSamples[[1]])[1]
+    
+    AvVec <- rowMeans(cbind(AllpeptideSamples[[1]][,2],AllpeptideSamples[[2]][,2],AllpeptideSamples[[3]][,2]))
+    AvVec <- as.data.frame(AvVec)
+    
+    
+    colnames(AvVec)<-"Average Centroid"
+    
+    
+    return(AvVec)
+    
+    
 }
 
 
@@ -50,33 +50,33 @@ AvCent <- function(AllpeptideSamples){
 
 
 manualCentroids2 <- function(spectrum,i,j,TimeP,mass,bpint=0.5){
-
-  plot(spectrum,main=paste("Sample",j,"Time",TimeP[i],sep=" "))
-  p <- locator(type="p",col="red",pch=1)
-  p <- as.data.frame(p)
-  p <- p[order(p$x),]
-  p <- createMassPeaks(mass=p$x,intensity = p$y)
-  #cat("\n","Enter peak width (as % of base peak intensity):","\n")
-  #bpint <- scan(n=1)
-  v <- widthFinder(p,spectrum,bpint)
-  w <- v[2]-v[1]
-  c <- centroidCalc(v,spectrum)
-
-  interp <- linearInterp(p)
-
-  plotLin(interp,p)
-  plotWidth(v)
-  centroidPlot(c,spectrum)
-  legend('topright',c('Spectrum','Distribution Width','Centroid','Peak envelope'),
-         lty=1,lwd=c(1,4,4,1),col=c('black','orange','green','red'))
-
-  cat ("Press [enter] to continue")
-  line <- readline()
-
-
-
-  return(c(c,w))
-
+    
+    plot(spectrum,main=paste("Sample",j,"Time",TimeP[i],sep=" "))
+    p <- locator(type="p",col="red",pch=1)
+    p <- as.data.frame(p)
+    p <- p[order(p$x),]
+    p <- createMassPeaks(mass=p$x,intensity = p$y)
+    #cat("\n","Enter peak width (as % of base peak intensity):","\n")
+    #bpint <- scan(n=1)
+    v <- widthFinder(p,spectrum,bpint)
+    w <- v[2]-v[1]
+    c <- centroidCalc(v,spectrum)
+    
+    interp <- linearInterp(p)
+    
+    plotLin(interp,p)
+    plotWidth(v)
+    centroidPlot(c,spectrum)
+    legend('topright',c('Spectrum','Distribution Width','Centroid','Peak envelope'),
+           lty=1,lwd=c(1,4,4,1),col=c('black','orange','green','red'))
+    
+    cat ("Press [enter] to continue")
+    line <- readline()
+    
+    
+    
+    return(c(c,w))
+    
 }
 
 
@@ -303,7 +303,7 @@ mainCentMerge <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time=0
 
 
 
-mainCentNewMod2 <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time=0){
+mainCentNewMod2 <- function(samplematrix,charge=1,SNR=5,bpint=0.5){
     
     Samples <- unique(samplematrix[,1])
     NoSamples <- length(Samples)  #Equal to 3 here
@@ -325,13 +325,20 @@ mainCentNewMod2 <- function(samplematrix,charge=1,SNR=10,bpint=0.5,sample=0,time
             index <- i+(j-1)*noTimeP
             s <- createMassSpectrum(mass=masses,intensity=as.numeric(new[index,]))
             p <- peakPick(s,SNR)
-            v <- widthFinder(p,s,bpint)
-            w[i] <- (v[2]-v[1])*charge
-            cp[i] <- centroidCalc(v,s)
             
-            c[i] <- cp[i]
+            if(length(p)>1){
+                v <- widthFinder(p,s,bpint)
+                w[i] <- (v[2]-v[1])*charge
+                c[i] <- centroidCalc(v,s)
+            }
             
-            interp <- linearInterp(p)
+            else{
+                w[i] <- NA
+                c[i] <- NA
+            }
+            
+            
+            
             
         }
         
