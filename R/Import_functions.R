@@ -71,16 +71,25 @@ masswindow <- function(peptide.index = 1,HDXdata_matrix, masswindow = ids[,1:2])
     min <- masswindow[peptide.index,1]
     max <- masswindow[peptide.index,2]
     flag <- 0
-    for (i in 3:dim(HDXdata_matrix)[[2]]){
-        if(as.numeric(colnames(HDXdata_matrix)[i]) > min && flag ==0){
+    
+    for (i in 3:dim(HDXdata_matrix)[2]){
+        
+        curMass <- as.numeric(colnames(HDXdata_matrix)[i])
+        
+    
+        if(curMass > min && flag ==0){
+            print(curMass > min)
             start <- i-1
             flag <- 1
+            
+         
         }
-        if(as.numeric(colnames(HDXdata_matrix)[i]) > max && flag == 1){
+        if(curMass > max && flag == 1){
             end <- i
             flag <- 2
         }
     }
+
     
     # this code combines the sampleID and timepoint information with masswindow data in a new featurematrix
     # filter by sampleID and timepoint and return the ordered featurematrix
@@ -95,7 +104,7 @@ masswindow <- function(peptide.index = 1,HDXdata_matrix, masswindow = ids[,1:2])
 intensitymat <- function(spectra){
     
     # This code extracts sample, timepoint and replicate information from spectrum metadata
-    sampletable<-colsplit(string=substring(factor(sapply(spectra,function(A)metaData(A)$file)),nchar(getwd())+12,nchar(getwd())+19),"_",names=c("sample","timepoint","replicate"))
+    sampletable<-colsplit(string=substring(factor(sapply(spectra,function(A)metaData(A)$file)),nchar(getwd())+2,nchar(getwd())+9),"_",names=c("sample","timepoint","replicate"))
     sampletable[,3]<-substring(sampletable[,3], 1, 1)
     
     # This code creates the m/z vs intensity feature matrix
