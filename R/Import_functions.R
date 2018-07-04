@@ -14,7 +14,7 @@
 #' @examples
 #' peptide.features <- importNew()
 
-importNew <- function (path = getwd(), ids = peptide.identifications,tol=0.006){
+importNew <- function (path =getwd(), ids = peptide.identifications,tol=0.006){
     # function to import Bruker raw spectra into r for subsequent use in HD-Express and MEMHDX
     # this function requires all spectra being copied into the current working directory (ie. getwd) in a data folder called HDXddmmyy (ie. HDX301016)
     # all spectra folders should be named according to the follwing convention:
@@ -104,7 +104,7 @@ masswindow <- function(peptide.index = 1,HDXdata_matrix, masswindow = ids[,1:2])
 intensitymat <- function(spectra){
     
     # This code extracts sample, timepoint and replicate information from spectrum metadata
-    sampletable<-colsplit(string=substring(factor(sapply(spectra,function(A)metaData(A)$file)),nchar(getwd())+2,nchar(getwd())+9),"_",names=c("sample","timepoint","replicate"))
+    sampletable<-colsplit(string=str_extract(factor(sapply(spectra,function(A)metaData(A)$file)),"[A-Z]_\\d+\\d*_\\d+\\d*"),"_",names=c("sample","timepoint","replicate"))
     sampletable[,3]<-substring(sampletable[,3], 1, 1)
     
     # This code creates the m/z vs intensity feature matrix
