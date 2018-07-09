@@ -15,7 +15,16 @@ AvCent <- function(AllpeptideSamples){
     numSam <- length(AllpeptideSamples)
     numTime <- dim(AllpeptideSamples[[1]])[1]
     
-    AvVec <- rowMeans(cbind(AllpeptideSamples[[1]][,2],AllpeptideSamples[[2]][,2],AllpeptideSamples[[3]][,2]))
+    Vec <- AllpeptideSamples[[1]][,2]
+    
+    i <- 1
+    while(i < numSam){
+        
+        Vec <- cbind(Vec,AllpeptideSamples[[i]][,2])
+        i <- i+1
+    }
+    
+    AvVec <- rowMeans(Vec)
     AvVec <- as.data.frame(AvVec)
     
     
